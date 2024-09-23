@@ -1,0 +1,41 @@
+{
+  "name" : "Customer Landing to Trusted",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::723480298271:role/my-glue-service-role",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-723480298271-us-east-1/scripts/customer_etl.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-723480298271-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "false",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-723480298271-us-east-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 28,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "4.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1726703912686\":{\"S3DirectTarget\":{\"AutoDataQuality\":{\"IsEnabled\":false},\"Compression\":\"none\",\"Format\":\"json\",\"Inputs\":[\"node-1726703906561\"],\"Name\":\"Amazon S3\",\"PartitionKeys\":[],\"Path\":\"s3://big-tiddy-goth-girls/customer/trusted/\",\"SchemaChangePolicy\":{\"Database\":\"stedidb\",\"EnableUpdateCatalog\":true,\"Table\":\"data_catalog\",\"UpdateBehavior\":\"UPDATE_IN_DATABASE\"}}},\"node-1726703906561\":{\"Filter\":{\"Filters\":[{\"Negated\":true,\"Operation\":\"EQ\",\"Values\":[{\"Type\":\"COLUMNEXTRACTED\",\"Value\":[\"shareWithResearchAsOfDate\"]},{\"Type\":\"CONSTANT\",\"Value\":[\"0\"]}]}],\"Inputs\":[\"node-1726703877977\"],\"LogicalOperator\":\"AND\",\"Name\":\"Filter for trusted records\"}},\"node-1726703877977\":{\"S3JsonSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://big-tiddy-goth-girls/customer/landing/customer-1691348231425.json\"},\"Exclusions\":[],\"JsonPath\":\"\",\"Multiline\":false,\"Name\":\"Landing Bucket\",\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"customerName\",\"Type\":\"string\"},{\"Name\":\"email\",\"Type\":\"string\"},{\"Name\":\"phone\",\"Type\":\"string\"},{\"Name\":\"birthDay\",\"Type\":\"string\"},{\"Name\":\"serialNumber\",\"Type\":\"string\"},{\"Name\":\"registrationDate\",\"Type\":\"bigint\"},{\"Name\":\"lastUpdateDate\",\"Type\":\"bigint\"},{\"Name\":\"shareWithResearchAsOfDate\",\"Type\":\"bigint\"},{\"Name\":\"shareWithPublicAsOfDate\",\"Type\":\"bigint\"},{\"Name\":\"shareWithFriendsAsOfDate\",\"Type\":\"bigint\"}]}],\"Paths\":[\"s3://big-tiddy-goth-girls/customer/landing/\"],\"Recurse\":true}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "udacity-stedi-proj",
+    "branch" : "aws-branch",
+    "folder" : "glue-jobs"
+  }
+}
