@@ -1,0 +1,41 @@
+{
+  "name" : "accel-landing-to-trusted",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::723480298271:role/my-glue-service-role",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-723480298271-us-east-1/scripts/accel-landing-to-trusted.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-723480298271-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "false",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-723480298271-us-east-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 28,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "4.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1727110260199\":{\"SparkSQL\":{\"Inputs\":[\"node-1727110019675\"],\"Name\":\"select fields\",\"SqlAliases\":[{\"Alias\":\"myDataSource\",\"From\":\"node-1727110019675\"}],\"SqlQuery\":\"select user, timestamp, x, y, z \\nfrom myDataSource\"}},\"node-1727110113143\":{\"S3DirectTarget\":{\"AutoDataQuality\":{\"IsEnabled\":false},\"Compression\":\"none\",\"Format\":\"json\",\"Inputs\":[\"node-1727110260199\"],\"Name\":\"accel-trusted\",\"PartitionKeys\":[],\"Path\":\"s3://big-tiddy-goth-girls/accelerometer/trusted/\",\"SchemaChangePolicy\":{\"Database\":\"stedidb\",\"EnableUpdateCatalog\":true,\"Table\":\"accelerometer_trusted\",\"UpdateBehavior\":\"UPDATE_IN_DATABASE\"}}},\"node-1727110019675\":{\"Join\":{\"Columns\":[{\"From\":\"node-1727109409010\",\"Keys\":[[\"email\"]]},{\"From\":\"node-1727109406182\",\"Keys\":[[\"user\"]]}],\"Inputs\":[\"node-1727109409010\",\"node-1727109406182\"],\"JoinType\":\"equijoin\",\"Name\":\"Join\"}},\"node-1727109406182\":{\"S3JsonSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://big-tiddy-goth-girls/accelerometer/landing/accelerometer-1691348231445.json\"},\"Exclusions\":[],\"JsonPath\":\"\",\"Multiline\":false,\"Name\":\"Accel-landing\",\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"user\",\"Type\":\"string\"},{\"Name\":\"timestamp\",\"Type\":\"bigint\"},{\"Name\":\"x\",\"Type\":\"double\"},{\"Name\":\"y\",\"Type\":\"double\"},{\"Name\":\"z\",\"Type\":\"double\"}]}],\"Paths\":[\"s3://big-tiddy-goth-girls/accelerometer/landing/\"],\"Recurse\":true}},\"node-1727109409010\":{\"S3JsonSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://big-tiddy-goth-girls/customer/landing/customer-1691348231425.json\"},\"Exclusions\":[],\"JsonPath\":\"\",\"Multiline\":false,\"Name\":\"customer-landing\",\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"customerName\",\"Type\":\"string\"},{\"Name\":\"email\",\"Type\":\"string\"},{\"Name\":\"phone\",\"Type\":\"string\"},{\"Name\":\"birthDay\",\"Type\":\"string\"},{\"Name\":\"serialNumber\",\"Type\":\"string\"},{\"Name\":\"registrationDate\",\"Type\":\"bigint\"},{\"Name\":\"lastUpdateDate\",\"Type\":\"bigint\"},{\"Name\":\"shareWithResearchAsOfDate\",\"Type\":\"bigint\"},{\"Name\":\"shareWithPublicAsOfDate\",\"Type\":\"bigint\"},{\"Name\":\"shareWithFriendsAsOfDate\",\"Type\":\"bigint\"}]}],\"Paths\":[\"s3://big-tiddy-goth-girls/customer/landing/\"],\"Recurse\":true}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "udacity-stedi-proj",
+    "branch" : "aws-branch",
+    "folder" : "glue-jobs"
+  }
+}
