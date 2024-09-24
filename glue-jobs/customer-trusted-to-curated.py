@@ -24,11 +24,8 @@ Accellanding_node1727109406182 = glueContext.create_dynamic_frame.from_options(f
 # Script generated for node customer trusted
 customertrusted_node1727109409010 = glueContext.create_dynamic_frame.from_options(format_options={"multiLine": "false"}, connection_type="s3", format="json", connection_options={"paths": ["s3://big-tiddy-goth-girls/customer/trusted/"], "recurse": True}, transformation_ctx="customertrusted_node1727109409010")
 
-# Script generated for node Join
-Join_node1727110019675 = Join.apply(frame1=customertrusted_node1727109409010, frame2=Accellanding_node1727109406182, keys1=["email"], keys2=["user"], transformation_ctx="Join_node1727110019675")
-
-# Script generated for node select fields
-SqlQuery5093 = '''
+# Script generated for node select fields and join
+SqlQuery2234 = '''
 select customername, 
     email, 
     phone, 
@@ -39,14 +36,15 @@ select customername,
     sharewithresearchasofdate, 
     sharewithpublicasofdate, 
     sharewithfriendsasofdate 
-from myDataSource
+from ct
+where email in (select distinct user from al)
 
 '''
-selectfields_node1727110260199 = sparkSqlQuery(glueContext, query = SqlQuery5093, mapping = {"myDataSource":Join_node1727110019675}, transformation_ctx = "selectfields_node1727110260199")
+selectfieldsandjoin_node1727110260199 = sparkSqlQuery(glueContext, query = SqlQuery2234, mapping = {"ct":customertrusted_node1727109409010, "al":Accellanding_node1727109406182}, transformation_ctx = "selectfieldsandjoin_node1727110260199")
 
 # Script generated for node customer curated
 customercurated_node1727110113143 = glueContext.getSink(path="s3://big-tiddy-goth-girls/customer/curated/", connection_type="s3", updateBehavior="UPDATE_IN_DATABASE", partitionKeys=[], enableUpdateCatalog=True, transformation_ctx="customercurated_node1727110113143")
 customercurated_node1727110113143.setCatalogInfo(catalogDatabase="stedidb",catalogTableName="customer_curated")
 customercurated_node1727110113143.setFormat("json")
-customercurated_node1727110113143.writeFrame(selectfields_node1727110260199)
+customercurated_node1727110113143.writeFrame(selectfieldsandjoin_node1727110260199)
 job.commit()
